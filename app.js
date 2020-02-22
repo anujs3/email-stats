@@ -39,8 +39,7 @@ app.post('/', function (req, res) {
     console.log(req.headers);
     var payloads = req.body;
     if (req.headers["user-agent"] === "SendGrid Event API" || req.headers["user-agent"] === "Go-http-client/1.1") {
-        for (var i = 0; i < payloads.length; i++) {
-            var payload = payloads[i];
+        for (const payload of payloads) {
             console.log(payload);
             totalEvents++;
             totalCounts[payload.event]++;
