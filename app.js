@@ -11,6 +11,10 @@ function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+function sendResponse(res, json) {
+    res.send(JSON.stringify(json));
+}
+
 var totalCounts = {
     "open": 0,
     "click": 0,
@@ -47,47 +51,47 @@ app.post('/', function (req, res) {
 });
 
 app.get('/total_stats', function (req, res) {
-    res.send(JSON.stringify(totalCounts));
+    sendResponse(res, totalCounts);
 });
 
 app.get('/total_events', function (req, res) {
-    res.send(JSON.stringify({ "total": totalEvents }));
+    sendResponse(res, { "total": totalEvents });
 });
 
 app.get('/total_requests', function (req, res) {
-    res.send(JSON.stringify({ "requests": totalCounts["processed"] + totalCounts["dropped"] }));
+    sendResponse(res, { "requests": totalCounts["processed"] + totalCounts["dropped"] });
 });
 
 app.get('/category_stats', function (req, res) {
-    res.send(JSON.stringify(categoryCounts));
+    sendResponse(res, categoryCounts);
 });
 
 app.get('/category_stats/:cat', function (req, res) {
-    res.send(JSON.stringify(category.getCategoryStatsForCategory(categoryCounts, req.params.cat)));
+    sendResponse(res, category.getCategoryStatsForCategory(categoryCounts, req.params.cat));
 });
 
 app.get('/daily_stats', function (req, res) {
-    res.send(JSON.stringify(dailyCounts));
+    sendResponse(res, dailyCounts);
 });
 
 app.get('/daily_stats/:day', function (req, res) {
-    res.send(JSON.stringify(daily.getDailyStatsForDay(dailyCounts, req.params.day)));
+    sendResponse(res, daily.getDailyStatsForDay(dailyCounts, req.params.day));
 });
 
 app.get('/weekday_stats', function (req, res) {
-    res.send(JSON.stringify(weekdayCounts));
+    sendResponse(res, weekdayCounts);
 });
 
 app.get('/weekday_stats/:day', function (req, res) {
-    res.send(JSON.stringify(weekdayCounts[capitalizeFirstLetter(req.params.day)]));
+    sendResponse(res, weekdayCounts[capitalizeFirstLetter(req.params.day)]);
 });
 
 app.get('/hourly_stats', function (req, res) {
-    res.send(JSON.stringify(hourlyCounts));
+    sendResponse(res, hourlyCounts);
 });
 
 app.get('/hourly_stats/:hour', function (req, res) {
-    res.send(JSON.stringify(hourlyCounts[req.params.hour]));
+    sendResponse(res, hourlyCounts[req.params.hour]);
 });
 
 app.get('/clear', function (req, res) {
@@ -99,8 +103,9 @@ app.get('/clear', function (req, res) {
     categoryCounts = {};
     dailyCounts = {};
     weekdayCounts = {};
+    hourlyCounts = {};
+    totalEvents = 0;
     res.send("counters have been cleared");
 });
-
 
 app.listen(port, () => console.log(`listening on port ${port}`));
