@@ -184,9 +184,9 @@ Response:
 
 `/clear`
 
-Request:
-
 Clear will clear all of the counters.
+
+Request:
 
 ```bash
 curl http://localhost:8888/clear
