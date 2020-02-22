@@ -9,12 +9,5 @@ module.exports = {
         } else {
             shared.incrementCounter(categoryCounts, payload.category, payload.event)
         }
-    },
-    getCategoryStatsForCategory: function (categoryCounts, categoryName) {
-        if (categoryCounts.hasOwnProperty(categoryName)) {
-            return categoryCounts[categoryName];
-        } else {
-            return { "error": "unable to fetch stats for invalid category", "category": categoryName };
-        }
     }
 };

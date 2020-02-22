@@ -6,6 +6,15 @@ module.exports = {
         } else {
             counts[key][event] = 1;
         }
+    },
+    getStatsForKey: function (counts, key, keyType) {
+        if (counts.hasOwnProperty(key)) {
+            return counts[key];
+        } else {
+            var errorMessage = { "error": "unable to fetch stats for invalid " + keyType };
+            errorMessage[keyType] = key;
+            return errorMessage;
+        }
     }
 }
 

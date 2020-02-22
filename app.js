@@ -1,6 +1,7 @@
 var express = require('express');
 var category = require('./category');
 var daily = require('./date');
+var shared = require('./shared');
 
 const port = 8888;
 
@@ -67,7 +68,7 @@ app.get('/category_stats', function (req, res) {
 });
 
 app.get('/category_stats/:cat', function (req, res) {
-    sendResponse(res, category.getCategoryStatsForCategory(categoryCounts, req.params.cat));
+    sendResponse(res, shared.getStatsForKey(categoryCounts, req.params.cat, "category"));
 });
 
 app.get('/daily_stats', function (req, res) {
@@ -75,7 +76,7 @@ app.get('/daily_stats', function (req, res) {
 });
 
 app.get('/daily_stats/:day', function (req, res) {
-    sendResponse(res, daily.getDailyStatsForDay(dailyCounts, req.params.day));
+    sendResponse(res, shared.getStatsForKey(dailyCounts, req.params.day, "date"));
 });
 
 app.get('/weekday_stats', function (req, res) {
@@ -83,7 +84,7 @@ app.get('/weekday_stats', function (req, res) {
 });
 
 app.get('/weekday_stats/:day', function (req, res) {
-    sendResponse(res, weekdayCounts[capitalizeFirstLetter(req.params.day)]);
+    sendResponse(res, shared.getStatsForKey(weekdayCounts, capitalizeFirstLetter(req.params.day), "weekday"));
 });
 
 app.get('/hourly_stats', function (req, res) {
@@ -91,7 +92,7 @@ app.get('/hourly_stats', function (req, res) {
 });
 
 app.get('/hourly_stats/:hour', function (req, res) {
-    sendResponse(res, hourlyCounts[req.params.hour]);
+    sendResponse(res, shared.getStatsForKey(hourlyCounts, req.params.hour, "hour"));
 });
 
 app.get('/clear', function (req, res) {

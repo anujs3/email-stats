@@ -12,12 +12,5 @@ module.exports = {
         shared.incrementCounter(dailyCounts, dateString, payload.event);
         shared.incrementCounter(weekdayCounts, dayOfWeek, payload.event);
         shared.incrementCounter(hourlyCounts, hour, payload.event);
-    },
-    getDailyStatsForDay: function (dailyCounts, date) {
-        if (dailyCounts.hasOwnProperty(date)) {
-            return dailyCounts[date];
-        } else {
-            return { "error": "unable to fetch stats for invalid date", "date": date };
-        }
     }
 };
