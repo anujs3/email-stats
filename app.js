@@ -27,6 +27,7 @@ var totalCounts = {
 var categoryCounts = {};
 var dailyCounts = {};
 var weekdayCounts = {};
+var hourlyCounts = {};
 var totalEvents = 0;
 
 app.post('/', function (req, res) {
@@ -39,7 +40,7 @@ app.post('/', function (req, res) {
             totalEvents++;
             totalCounts[payload.event]++;
             category.incrementCategoryStats(categoryCounts, payload);
-            daily.incrementDateStats(dailyCounts, weekdayCounts, payload);
+            daily.incrementDateStats(dailyCounts, weekdayCounts, hourlyCounts, payload);
         }
     }
     return res.status(200).send("received events");
@@ -79,6 +80,14 @@ app.get('/weekday_stats', function (req, res) {
 
 app.get('/weekday_stats/:day', function (req, res) {
     res.send(JSON.stringify(weekdayCounts[capitalizeFirstLetter(req.params.day)]));
+});
+
+app.get('/hourly_stats', function (req, res) {
+    res.send(JSON.stringify(hourlyCounts));
+});
+
+app.get('/hourly_stats/:hour', function (req, res) {
+    res.send(JSON.stringify(hourlyCounts[req.params.hour]));
 });
 
 app.get('/clear', function (req, res) {

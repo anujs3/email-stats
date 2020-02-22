@@ -180,6 +180,40 @@ Response:
 {"processed":1,"deferred":1,"delivered":1,"open":1,"click":1,"bounce":1,"dropped":1,"spamreport":1,"unsubscribe":1,"group_unsubscribe":1,"group_resubscribe":1}
 ```
 
+### Hourly Stats
+
+`/hourly_stats`
+
+Retrieve stats for each hour of the day.
+
+Request:
+
+```bash
+curl http://localhost:8888/hourly_stats
+```
+
+Response:
+
+```json
+{"2PM":{"processed":1,"deferred":1,"delivered":1,"open":1,"click":1,"bounce":1,"dropped":1,"spamreport":1,"unsubscribe":1,"group_unsubscribe":1,"group_resubscribe":1},"3PM":{"processed":1,"deferred":1,"delivered":1,"open":1,"click":1,"bounce":1,"dropped":1,"spamreport":1,"unsubscribe":1,"group_unsubscribe":1,"group_resubscribe":1}}
+```
+
+`/hourly_stats/:hour`
+
+Retrieve stats for a specfic hour of the day.
+
+Request:
+
+```bash
+curl http://localhost:8888/hourly_stats/3PM
+```
+
+Response:
+
+```json
+{"processed":1,"deferred":1,"delivered":1,"open":1,"click":1,"bounce":1,"dropped":1,"spamreport":1,"unsubscribe":1,"group_unsubscribe":1,"group_resubscribe":1}
+```
+
 ### Reset
 
 `/clear`
