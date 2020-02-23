@@ -136,7 +136,7 @@ app.patch('/enable_notification', function (req, res) {
 app.delete('/delete_notification', function (req, res) {
     if (alerts.hasOwnProperty(req.body.name)) {
         delete alerts[req.body.name];
-        utilities.sendResponse(res, 200, { "success": "deleted the notification" });
+        return utilities.sendResponse(res, 200, { "success": "deleted the notification" });
     }
     return utilities.sendResponse(res, 400, { "error": "notification does not exist" });
 })
