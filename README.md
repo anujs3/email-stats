@@ -32,7 +32,7 @@ node app.js
 
 ### Totals
 
-`/total_stats`
+GET `/total_stats`
 
 Retrieve the total counts for processed, dropped, delivered, bounce, deferred, open, click, unsubscribe, group_unsubscribe, group_resubscribe, and spamreport events.
 
@@ -48,7 +48,7 @@ Response:
 {"processed":1,"dropped":1,"delivered":1,"bounce":1,"deferred":1,"open":1,"click":1,"unsubscribe":1,"group_unsubscribe":1,"group_resubscribe":1,"spamreport":1}
 ```
 
-`/total_events`
+GET `/total_events`
 
 Retrieve the total number of events that reached the webhook.
 
@@ -64,7 +64,7 @@ Response:
 {"total":11}
 ```
 
-`/total_requests`
+GET `/total_requests`
 
 Retreive the total number of requests (number of processed and dropped events).
 
@@ -82,7 +82,7 @@ Response:
 
 ### Categories
 
-`/category_stats`
+GET `/category_stats`
 
 Retrieve stats for each category.
 
@@ -98,7 +98,7 @@ Response:
 {"cat facts":{"processed":1,"deferred":1,"delivered":1,"open":1,"click":1,"bounce":1,"dropped":1,"spamreport":1,"unsubscribe":1,"group_unsubscribe":1,"group_resubscribe":1}}
 ```
 
-`/category_stats/:cat`
+GET `/category_stats/:cat`
 
 Retrieve stats for a specific category.
 
@@ -116,7 +116,7 @@ Response:
 
 ### Daily Stats
 
-`/daily_stats`
+GET `/daily_stats`
 
 Retreive stats for each day.
 
@@ -132,7 +132,7 @@ Response:
 {"2/22/2020":{"processed":1,"deferred":1,"delivered":1,"open":1,"click":1,"bounce":1,"dropped":1,"spamreport":1,"unsubscribe":1,"group_unsubscribe":1,"group_resubscribe":1}}
 ```
 
-`/daily_stats/:day`
+GET `/daily_stats/:day`
 
 Retrieve stats for a specific day.
 
@@ -148,7 +148,7 @@ Response:
 {"processed":1,"deferred":1,"delivered":1,"open":1,"click":1,"bounce":1,"dropped":1,"spamreport":1,"unsubscribe":1,"group_unsubscribe":1,"group_resubscribe":1}
 ```
 
-`/weekday_stats`
+GET `/weekday_stats`
 
 Retreive stats for each day of the week.
 
@@ -164,7 +164,7 @@ Response:
 {"Saturday":{"processed":1,"deferred":1,"delivered":1,"open":1,"click":1,"bounce":1,"dropped":1,"spamreport":1,"unsubscribe":1,"group_unsubscribe":1,"group_resubscribe":1}}
 ```
 
-`/weekday_stats/:day`
+GET `/weekday_stats/:day`
 
 Retrieve stats for a specific day of the week.
 
@@ -182,7 +182,7 @@ Response:
 
 ### Hourly Stats
 
-`/hourly_stats`
+GET `/hourly_stats`
 
 Retrieve stats for each hour of the day.
 
@@ -198,7 +198,7 @@ Response:
 {"2PM":{"processed":1,"deferred":1,"delivered":1,"open":1,"click":1,"bounce":1,"dropped":1,"spamreport":1,"unsubscribe":1,"group_unsubscribe":1,"group_resubscribe":1},"3PM":{"processed":1,"deferred":1,"delivered":1,"open":1,"click":1,"bounce":1,"dropped":1,"spamreport":1,"unsubscribe":1,"group_unsubscribe":1,"group_resubscribe":1}}
 ```
 
-`/hourly_stats/:hour`
+GET `/hourly_stats/:hour`
 
 Retrieve stats for a specfic hour of the day.
 
@@ -216,7 +216,7 @@ Response:
 
 ### Monthly Stats
 
-`/monthly_stats`
+GET `/monthly_stats`
 
 Retrieve stats for each month of the year.
 
@@ -232,7 +232,7 @@ Response:
 {"February":{"processed":1,"deferred":1,"delivered":1,"open":1,"click":1,"bounce":1,"dropped":1,"spamreport":1,"unsubscribe":1,"group_unsubscribe":1,"group_resubscribe":1}}
 ```
 
-`/monthly_stats/:month`
+GET `/monthly_stats/:month`
 
 Retrieve stats for a specfic month of the year.
 
@@ -263,5 +263,73 @@ curl http://localhost:8888/clear
 Response:
 
 ```json
-counters have been cleared
+{"success":"counters have been cleared"}
+```
+
+### Notifications
+
+You can create alerts to get notified via a text message when you reach a certain number of events. Note: You will need to export your `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, and `TWILIO_PHONE_NUMBER`.
+
+#### Create Notification
+
+POST `/create_notification`
+
+Request:
+
+```bash
+curl --request POST --header "Content-Type: application/json" --data '{"name":"got 5 opens","event":"open","threshold":5,"phone":"+10001112222"}' http://localhost:8888/create_notification
+```
+
+Response:
+
+```json
+{"success":"created the notification"}
+```
+
+#### Get Notifications
+
+GET `/notifications`
+
+Request:
+
+```bash
+curl http://localhost:8888/notifications
+```
+
+Response:
+
+```json
+{"got 5 opens":{"enabled":false,"phone":"+10001112222","event":"open","threshold":5}}
+```
+
+#### Enable Notification
+
+PATCH `/enable_notification`
+
+Request:
+
+```bash
+curl --request PATCH --header "Content-Type: application/json" --data '{"name":"got 5 opens"}' http://localhost:8888/enable_notification
+```
+
+Response:
+
+```json
+{"success":"enabled the notification"}
+```
+
+#### Delete Notification
+
+DELETE `/delete_notification`
+
+Request:
+
+```bash
+curl --request DELETE --header "Content-Type: application/json" --data '{"name":"got 5 opens"}' http://localhost:8888/delete_notification
+```
+
+Response:
+
+```json
+{"success":"deleted the notification"}
 ```

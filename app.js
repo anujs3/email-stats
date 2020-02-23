@@ -8,12 +8,35 @@ const port = 8888;
 var app = express();
 app.use(express.json());
 
+var client = require('twilio')(
+    process.env.TWILIO_ACCOUNT_SID,
+    process.env.TWILIO_AUTH_TOKEN
+);
+
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 function sendResponse(res, json) {
     res.send(JSON.stringify(json));
+}
+
+function sendTextMessage(toPhone, text) {
+    client.messages.create({
+        from: process.env.TWILIO_PHONE_NUMBER,
+        to: toPhone,
+        body: text
+    }).then((message) => console.log(`alert "${message.body}" fired!`));
+}
+
+function checkAlerts(alerts) {
+    for (var name in alerts) {
+        var alert = alerts[name];
+        if (alert["enabled"] && totalCounts[alert["event"]] == alert["threshold"]) {
+            sendTextMessage(alert["phone"], name);
+            alert["enabled"] = false;
+        }
+    }
 }
 
 var totalCounts = {
@@ -35,6 +58,7 @@ var weekdayCounts = {};
 var hourlyCounts = {};
 var monthlyCounts = {};
 var totalEvents = 0;
+var alerts = {};
 
 app.post('/', function (req, res) {
     console.log(req.headers);
@@ -46,6 +70,7 @@ app.post('/', function (req, res) {
             totalCounts[payload.event]++;
             category.incrementCategoryStats(categoryCounts, payload);
             daily.incrementDateStats(dailyCounts, weekdayCounts, hourlyCounts, monthlyCounts, payload);
+            checkAlerts(alerts);
         }
     }
     return res.status(200).send("received events");
@@ -113,7 +138,35 @@ app.get('/clear', function (req, res) {
     hourlyCounts = {};
     monthlyCounts = {};
     totalEvents = 0;
-    res.send("counters have been cleared");
+    sendResponse(res, { "success": "counters have been cleared" });
 });
+
+app.get('/notifications', function (req, res) {
+    sendResponse(res, alerts);
+});
+
+app.post('/create_notification', function (req, res) {
+    alerts[req.body.name] = {
+        "enabled": true,
+        "phone": req.body.phone,
+        "event": req.body.event,
+        "threshold": req.body.threshold
+    }
+    sendResponse(res, { "success": "created the notification" });
+})
+
+app.patch('/enable_notification', function (req, res) {
+    if (alerts.hasOwnProperty(req.body.name)) {
+        alerts[req.body.name]["enabled"] = true;
+    }
+    sendResponse(res, { "success": "enabled the notification" });
+})
+
+app.delete('/delete_notification', function (req, res) {
+    if (alerts.hasOwnProperty(req.body.name)) {
+        delete alerts[req.body.name];
+    }
+    sendResponse(res, { "success": "deleted the notification" });
+})
 
 app.listen(port, () => console.log(`listening on port ${port}`));

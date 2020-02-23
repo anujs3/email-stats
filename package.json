@@ -10,5 +10,8 @@
   "license": "ISC",
   "devDependencies": {
     "eslint": "^6.8.0"
+  },
+  "dependencies": {
+    "twilio": "^3.39.5"
   }
 }
