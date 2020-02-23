@@ -28,6 +28,15 @@ Start the application. Note: The application runs on port 8888.
 node app.js
 ```
 
+Send fake event data using this handy SendGrid endpoint.
+
+```bash
+curl --request POST \
+  --url https://api.sendgrid.com/v3/user/webhooks/event/test \
+  --header 'authorization: Bearer <SENDGRID_API_KEY>' \
+  --data '{"url":"<NGROK_URL>"}'
+```
+
 ## Endpoints
 
 ### Totals
