@@ -214,6 +214,40 @@ Response:
 {"processed":1,"deferred":1,"delivered":1,"open":1,"click":1,"bounce":1,"dropped":1,"spamreport":1,"unsubscribe":1,"group_unsubscribe":1,"group_resubscribe":1}
 ```
 
+### Monthly Stats
+
+`/monthly_stats`
+
+Retrieve stats for each month of the year.
+
+Request:
+
+```bash
+curl http://localhost:8888/monthly_stats
+```
+
+Response:
+
+```json
+{"February":{"processed":1,"deferred":1,"delivered":1,"open":1,"click":1,"bounce":1,"dropped":1,"spamreport":1,"unsubscribe":1,"group_unsubscribe":1,"group_resubscribe":1}}
+```
+
+`/monthly_stats/:month`
+
+Retrieve stats for a specfic month of the year.
+
+Request:
+
+```bash
+curl http://localhost:8888/monthly_stats/february
+```
+
+Response:
+
+```json
+{"processed":1,"deferred":1,"delivered":1,"open":1,"click":1,"bounce":1,"dropped":1,"spamreport":1,"unsubscribe":1,"group_unsubscribe":1,"group_resubscribe":1}
+```
+
 ### Reset
 
 `/clear`

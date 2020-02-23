@@ -33,6 +33,7 @@ var categoryCounts = {};
 var dailyCounts = {};
 var weekdayCounts = {};
 var hourlyCounts = {};
+var monthlyCounts = {};
 var totalEvents = 0;
 
 app.post('/', function (req, res) {
@@ -44,7 +45,7 @@ app.post('/', function (req, res) {
             totalEvents++;
             totalCounts[payload.event]++;
             category.incrementCategoryStats(categoryCounts, payload);
-            daily.incrementDateStats(dailyCounts, weekdayCounts, hourlyCounts, payload);
+            daily.incrementDateStats(dailyCounts, weekdayCounts, hourlyCounts, monthlyCounts, payload);
         }
     }
     return res.status(200).send("received events");
@@ -94,6 +95,14 @@ app.get('/hourly_stats/:hour', function (req, res) {
     sendResponse(res, shared.getStatsForKey(hourlyCounts, req.params.hour, "hour"));
 });
 
+app.get('/monthly_stats', function (req, res) {
+    sendResponse(res, monthlyCounts);
+});
+
+app.get('/monthly_stats/:month', function (req, res) {
+    sendResponse(res, shared.getStatsForKey(monthlyCounts, capitalizeFirstLetter(req.params.month), "month"));
+});
+
 app.get('/clear', function (req, res) {
     for (var key in totalCounts) {
         totalCounts[key] = 0;
@@ -102,6 +111,7 @@ app.get('/clear', function (req, res) {
     dailyCounts = {};
     weekdayCounts = {};
     hourlyCounts = {};
+    monthlyCounts = {};
     totalEvents = 0;
     res.send("counters have been cleared");
 });
