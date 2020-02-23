@@ -1,43 +1,13 @@
 var express = require('express');
 var category = require('./category');
 var daily = require('./date');
+var notifications = require('./notifications');
 var utilities = require('./utilities');
 
 const port = 8888;
 
 var app = express();
 app.use(express.json());
-
-var client = require('twilio')(
-    process.env.TWILIO_ACCOUNT_SID,
-    process.env.TWILIO_AUTH_TOKEN
-);
-
-function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
-}
-
-function sendResponse(res, json) {
-    res.send(JSON.stringify(json));
-}
-
-function sendTextMessage(toPhone, text) {
-    client.messages.create({
-        from: process.env.TWILIO_PHONE_NUMBER,
-        to: toPhone,
-        body: text
-    }).then((message) => console.log(`alert "${message.body}" fired!`));
-}
-
-function checkAlerts(alerts) {
-    for (var name in alerts) {
-        var alert = alerts[name];
-        if (alert["enabled"] && totalCounts[alert["event"]] == alert["threshold"]) {
-            sendTextMessage(alert["phone"], name);
-            alert["enabled"] = false;
-        }
-    }
-}
 
 var totalCounts = {
     "processed": 0,
@@ -70,62 +40,62 @@ app.post('/', function (req, res) {
             totalCounts[payload.event]++;
             category.incrementCategoryStats(categoryCounts, payload);
             daily.incrementDateStats(dailyCounts, weekdayCounts, hourlyCounts, monthlyCounts, payload);
-            checkAlerts(alerts);
+            notifications.checkAlerts(totalCounts, alerts);
         }
     }
-    return res.status(200).send("received events");
+    res.status(200).send("received events");
 });
 
 app.get('/total_stats', function (req, res) {
-    sendResponse(res, totalCounts);
+    utilities.sendResponse(res, totalCounts);
 });
 
 app.get('/total_events', function (req, res) {
-    sendResponse(res, { "total": totalEvents });
+    utilities.sendResponse(res, { "total": totalEvents });
 });
 
 app.get('/total_requests', function (req, res) {
-    sendResponse(res, { "requests": totalCounts["processed"] + totalCounts["dropped"] });
+    utilities.sendResponse(res, { "requests": totalCounts["processed"] + totalCounts["dropped"] });
 });
 
 app.get('/category_stats', function (req, res) {
-    sendResponse(res, categoryCounts);
+    utilities.sendResponse(res, categoryCounts);
 });
 
 app.get('/category_stats/:cat', function (req, res) {
-    sendResponse(res, utilities.getStatsForKey(categoryCounts, req.params.cat, "category"));
+    utilities.sendResponse(res, utilities.getStatsForKey(categoryCounts, req.params.cat, "category"));
 });
 
 app.get('/daily_stats', function (req, res) {
-    sendResponse(res, dailyCounts);
+    utilities.sendResponse(res, dailyCounts);
 });
 
 app.get('/daily_stats/:day', function (req, res) {
-    sendResponse(res, utilities.getStatsForKey(dailyCounts, req.params.day, "date"));
+    utilities.sendResponse(res, utilities.getStatsForKey(dailyCounts, req.params.day, "date"));
 });
 
 app.get('/weekday_stats', function (req, res) {
-    sendResponse(res, weekdayCounts);
+    utilities.sendResponse(res, weekdayCounts);
 });
 
 app.get('/weekday_stats/:day', function (req, res) {
-    sendResponse(res, utilities.getStatsForKey(weekdayCounts, capitalizeFirstLetter(req.params.day), "weekday"));
+    utilities.sendResponse(res, utilities.getStatsForKey(weekdayCounts, utilities.capitalizeFirstLetter(req.params.day), "weekday"));
 });
 
 app.get('/hourly_stats', function (req, res) {
-    sendResponse(res, hourlyCounts);
+    utilities.sendResponse(res, hourlyCounts);
 });
 
 app.get('/hourly_stats/:hour', function (req, res) {
-    sendResponse(res, utilities.getStatsForKey(hourlyCounts, req.params.hour.toUpperCase(), "hour"));
+    utilities.sendResponse(res, utilities.getStatsForKey(hourlyCounts, req.params.hour.toUpperCase(), "hour"));
 });
 
 app.get('/monthly_stats', function (req, res) {
-    sendResponse(res, monthlyCounts);
+    utilities.sendResponse(res, monthlyCounts);
 });
 
 app.get('/monthly_stats/:month', function (req, res) {
-    sendResponse(res, utilities.getStatsForKey(monthlyCounts, capitalizeFirstLetter(req.params.month), "month"));
+    utilities.sendResponse(res, utilities.getStatsForKey(monthlyCounts, capitalizeFirstLetter(req.params.month), "month"));
 });
 
 app.get('/clear', function (req, res) {
@@ -138,11 +108,11 @@ app.get('/clear', function (req, res) {
     hourlyCounts = {};
     monthlyCounts = {};
     totalEvents = 0;
-    sendResponse(res, { "success": "counters have been cleared" });
+    utilities.sendResponse(res, { "success": "counters have been cleared" });
 });
 
 app.get('/notifications', function (req, res) {
-    sendResponse(res, alerts);
+    utilities.sendResponse(res, alerts);
 });
 
 app.post('/create_notification', function (req, res) {
@@ -152,21 +122,21 @@ app.post('/create_notification', function (req, res) {
         "event": req.body.event,
         "threshold": req.body.threshold
     }
-    sendResponse(res, { "success": "created the notification" });
+    utilities.sendResponse(res, { "success": "created the notification" });
 })
 
 app.patch('/enable_notification', function (req, res) {
     if (alerts.hasOwnProperty(req.body.name)) {
         alerts[req.body.name]["enabled"] = true;
     }
-    sendResponse(res, { "success": "enabled the notification" });
+    utilities.sendResponse(res, { "success": "enabled the notification" });
 })
 
 app.delete('/delete_notification', function (req, res) {
     if (alerts.hasOwnProperty(req.body.name)) {
         delete alerts[req.body.name];
     }
-    sendResponse(res, { "success": "deleted the notification" });
+    utilities.sendResponse(res, { "success": "deleted the notification" });
 })
 
 app.listen(port, () => console.log(`listening on port ${port}`));

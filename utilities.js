@@ -15,8 +15,14 @@ module.exports = {
             errorMessage[keyType] = key;
             return errorMessage;
         }
+    },
+    capitalizeFirstLetter: function (string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    },
+    sendResponse: function (res, json) {
+        res.send(JSON.stringify(json));
     }
-}
+};
 
 function initializeCounter(counts, key) {
     if (!counts.hasOwnProperty(key)) {
