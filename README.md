@@ -12,12 +12,12 @@ Download and setup [ngrok](https://ngrok.com/download).
 ./ngrok http 127.0.0.1:8888
 ```
 
-Set your webhook URL equal to the URL that ngrok gives you.
+Set your webhook URL equal to the URL that ngrok gives you. Note: You will need a SendGrid API key for this.
 
 ```bash
 curl --request PATCH \
   --url https://api.sendgrid.com/v3/user/webhooks/event/settings \
-  --header 'authorization: Bearer <SENDGRID_API_KEY_HERE>' \
+  --header 'authorization: Bearer <SENDGRID_API_KEY>' \
   --header 'content-type: application/json' \
   --data '{"enabled":true,"url":"<NGROK_URL>","group_resubscribe":true,"delivered":true,"group_unsubscribe":true,"spam_report":true,"bounce":true,"deferred":true,"unsubscribe":true,"processed":true,"open":true,"click":true,"dropped":true}'
 ```
