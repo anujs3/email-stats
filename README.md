@@ -34,7 +34,7 @@ node app.js
 
 `/total_stats`
 
-Retrieve the total counts for processed, dropped, delivered, bounce, deferred, open, click, unsubscribe, group_unsubscribe, group_resubscribe, and spam_report events.
+Retrieve the total counts for processed, dropped, delivered, bounce, deferred, open, click, unsubscribe, group_unsubscribe, group_resubscribe, and spamreport events.
 
 Request:
 
@@ -45,7 +45,7 @@ curl http://localhost:8888/total_stats
 Response:
 
 ```json
-{"open":1,"click":1,"dropped":1,"group_unsubscribe":1,"group_resubscribe":1,"unsubscribe":1,"processed":1,"delivered":1,"bounce":1,"deferred":1,"spamreport":1}
+{"processed":1,"dropped":1,"delivered":1,"bounce":1,"deferred":1,"open":1,"click":1,"unsubscribe":1,"group_unsubscribe":1,"group_resubscribe":1,"spamreport":1}
 ```
 
 `/total_events`

@@ -17,16 +17,16 @@ function sendResponse(res, json) {
 }
 
 var totalCounts = {
-    "open": 0,
-    "click": 0,
-    "dropped": 0,
-    "group_unsubscribe": 0,
-    "group_resubscribe": 0,
-    "unsubscribe": 0,
     "processed": 0,
+    "dropped": 0,
     "delivered": 0,
     "bounce": 0,
     "deferred": 0,
+    "open": 0,
+    "click": 0,
+    "unsubscribe": 0,
+    "group_unsubscribe": 0,
+    "group_resubscribe": 0,
     "spamreport": 0,
 };
 var categoryCounts = {};
@@ -96,9 +96,7 @@ app.get('/hourly_stats/:hour', function (req, res) {
 
 app.get('/clear', function (req, res) {
     for (var key in totalCounts) {
-        if (totalCounts.hasOwnProperty(key)) {
-            totalCounts[key] = 0;
-        }
+        totalCounts[key] = 0;
     }
     categoryCounts = {};
     dailyCounts = {};
