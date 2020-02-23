@@ -92,7 +92,7 @@ app.get('/hourly_stats', function (req, res) {
 });
 
 app.get('/hourly_stats/:hour', function (req, res) {
-    sendResponse(res, shared.getStatsForKey(hourlyCounts, req.params.hour, "hour"));
+    sendResponse(res, shared.getStatsForKey(hourlyCounts, req.params.hour.toUpperCase(), "hour"));
 });
 
 app.get('/monthly_stats', function (req, res) {
