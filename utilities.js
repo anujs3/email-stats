@@ -7,25 +7,27 @@ module.exports = {
             counts[key][event] = 1;
         }
     },
-    getStatsForKey: function (counts, key, keyType) {
+    getStatsForKey: function (res, counts, key, keyType) {
         if (counts.hasOwnProperty(key)) {
-            return counts[key];
+            return sendResponseBack(res, 200, counts[key]);
         } else {
             var errorMessage = { "error": "unable to fetch stats for invalid " + keyType };
             errorMessage[keyType] = key;
-            return errorMessage;
+            return sendResponseBack(res, 400, errorMessage);
         }
     },
     capitalizeFirstLetter: function (string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     },
-    sendResponse: function (res, json) {
-        res.send(JSON.stringify(json));
-    }
+    sendResponse: sendResponseBack
 };
 
 function initializeCounter(counts, key) {
     if (!counts.hasOwnProperty(key)) {
         counts[key] = {};
     }
+}
+
+function sendResponseBack(res, code, json) {
+    res.status(code).send(JSON.stringify(json));
 }
