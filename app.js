@@ -43,7 +43,7 @@ app.post('/', function (req, res) {
             counters["total_stats"][payload.event]++;
             category.incrementCategoryStats(counters, payload);
             daily.incrementDateStats(counters, payload);
-            notifications.checkAlerts(counters["total_stats"], alerts);
+            notifications.checkAlerts(counters, alerts);
         }
     }
     utilities.sendResponse(res, 200, { "success": "received events" });
@@ -123,13 +123,22 @@ app.get('/notifications', function (req, res) {
 });
 
 app.post('/create_notification', function (req, res) {
+    if (!counters.hasOwnProperty(req.body.counter)) {
+        return utilities.sendResponse(res, 400, { "error": "counter does not exist" });
+    }
+    if (req.body.threshold < 0) {
+        return utilities.sendResponse(res, 400, { "error": "invalid threshold" });
+    }
+
     alerts[req.body.name] = {
         "enabled": true,
         "phone": req.body.phone,
         "event": req.body.event,
         "threshold": req.body.threshold,
+        "counter": req.body.counter,
+        "key": req.body.key,
     }
-    utilities.sendResponse(res, 200, { "success": "created the notification" });
+    return utilities.sendResponse(res, 200, { "success": "created the notification" });
 })
 
 app.patch('/enable_notification', function (req, res) {

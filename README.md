@@ -302,7 +302,7 @@ POST `/create_notification`
 Request:
 
 ```bash
-curl --request POST --header "Content-Type: application/json" --data '{"name":"got 5 opens","event":"open","threshold":5,"phone":"+10001112222"}' http://localhost:8888/create_notification
+curl --request POST --header "Content-Type: application/json" --data '{"name":"got 5 opens","event":"open","threshold":5,"phone":"+10001112222","counter":"total_stats"}' http://localhost:8888/create_notification
 ```
 
 Response:
@@ -324,7 +324,7 @@ curl http://localhost:8888/notifications
 Response:
 
 ```json
-{"got 5 opens":{"enabled":false,"phone":"+10001112222","event":"open","threshold":5}}
+{"got 5 opens":{"enabled":true,"phone":"+10001112222","event":"open","threshold":5,"counter":"total_stats"}}
 ```
 
 #### Enable Notification
