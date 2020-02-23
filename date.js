@@ -5,15 +5,15 @@ var hours = ["12AM", "1AM", "2AM", "3AM", "4AM", "5AM", "6AM", "7AM", "8AM", "9A
 var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
 module.exports = {
-    incrementDateStats: function (dailyCounts, weekdayCounts, hourlyCounts, monthlyCounts, payload) {
+    incrementDateStats: function (counters, payload) {
         var date = new Date(payload.timestamp * 1000);
         var dateString = date.toLocaleDateString();
         var dayOfWeek = days[date.getDay()];
         var hour = hours[date.getHours()];
         var month = months[date.getMonth()];
-        utilities.incrementCounter(dailyCounts, dateString, payload.event);
-        utilities.incrementCounter(weekdayCounts, dayOfWeek, payload.event);
-        utilities.incrementCounter(hourlyCounts, hour, payload.event);
-        utilities.incrementCounter(monthlyCounts, month, payload.event);
+        utilities.incrementCounter(counters["daily_stats"], dateString, payload.event);
+        utilities.incrementCounter(counters["weekday_stats"], dayOfWeek, payload.event);
+        utilities.incrementCounter(counters["hourly_stats"], hour, payload.event);
+        utilities.incrementCounter(counters["monthly_stats"], month, payload.event);
     }
 };

@@ -1,13 +1,13 @@
 var utilities = require('./utilities');
 
 module.exports = {
-    incrementCategoryStats: function (categoryCounts, payload) {
+    incrementCategoryStats: function (counters, payload) {
         if (Array.isArray(payload.category)) {
             for (const category of payload.category) {
-                utilities.incrementCounter(categoryCounts, category, payload.event)
+                utilities.incrementCounter(counters["category_stats"], category, payload.event)
             }
         } else {
-            utilities.incrementCounter(categoryCounts, payload.category, payload.event)
+            utilities.incrementCounter(counters["category_stats"], payload.category, payload.event)
         }
     }
 };

@@ -41,6 +41,22 @@ curl --request POST \
 
 ### Totals
 
+GET `/all`
+
+Retrieve all of the counters.
+
+Request:
+
+```bash
+curl http://localhost:8888/all
+```
+
+Response:
+
+```json
+{"total_stats":{"processed":1,"dropped":1,"delivered":1,"bounce":1,"deferred":1,"open":1,"click":1,"unsubscribe":1,"group_unsubscribe":1,"group_resubscribe":1,"spamreport":1},"category_stats":{"cat facts":{"processed":1,"deferred":1,"delivered":1,"open":1,"click":1,"bounce":1,"dropped":1,"spamreport":1,"unsubscribe":1,"group_unsubscribe":1,"group_resubscribe":1}},"daily_stats":{"2/23/2020":{"processed":1,"deferred":1,"delivered":1,"open":1,"click":1,"bounce":1,"dropped":1,"spamreport":1,"unsubscribe":1,"group_unsubscribe":1,"group_resubscribe":1}},"weekday_stats":{"Sunday":{"processed":1,"deferred":1,"delivered":1,"open":1,"click":1,"bounce":1,"dropped":1,"spamreport":1,"unsubscribe":1,"group_unsubscribe":1,"group_resubscribe":1}},"hourly_stats":{"12PM":{"processed":1,"deferred":1,"delivered":1,"open":1,"click":1,"bounce":1,"dropped":1,"spamreport":1,"unsubscribe":1,"group_unsubscribe":1,"group_resubscribe":1}},"monthly_stats":{"February":{"processed":1,"deferred":1,"delivered":1,"open":1,"click":1,"bounce":1,"dropped":1,"spamreport":1,"unsubscribe":1,"group_unsubscribe":1,"group_resubscribe":1}},"total_events":11}
+```
+
 GET `/total_stats`
 
 Retrieve the total counts for processed, dropped, delivered, bounce, deferred, open, click, unsubscribe, group_unsubscribe, group_resubscribe, and spamreport events.
