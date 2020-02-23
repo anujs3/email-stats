@@ -1,13 +1,13 @@
-var shared = require('./shared');
+var utilities = require('./utilities');
 
 module.exports = {
     incrementCategoryStats: function (categoryCounts, payload) {
         if (Array.isArray(payload.category)) {
             for (const category of payload.category) {
-                shared.incrementCounter(categoryCounts, category, payload.event)
+                utilities.incrementCounter(categoryCounts, category, payload.event)
             }
         } else {
-            shared.incrementCounter(categoryCounts, payload.category, payload.event)
+            utilities.incrementCounter(categoryCounts, payload.category, payload.event)
         }
     }
 };
