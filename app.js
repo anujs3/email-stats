@@ -143,8 +143,14 @@ app.post('/notification', function (req, res) {
 
 app.patch('/notification', function (req, res) {
     if (alerts.hasOwnProperty(req.body.name)) {
-        alerts[req.body.name]["enabled"] = true;
-        return utilities.sendResponse(res, 200, { "success": "enabled the notification" });
+        if (req.body.enabled === null || req.body.enabled === "") {
+            req.body.enabled = true;
+        }
+        alerts[req.body.name]["enabled"] = req.body.enabled;
+        if (req.body.enabled == true) {
+            return utilities.sendResponse(res, 200, { "success": "enabled the notification" });
+        }
+        return utilities.sendResponse(res, 200, { "success": "disabled the notification" });
     }
     return utilities.sendResponse(res, 400, { "error": "notification does not exist" });
 })

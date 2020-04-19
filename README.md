@@ -327,14 +327,14 @@ Response:
 {"got 5 opens":{"enabled":true,"phone":"+10001112222","event":"open","threshold":5,"counter":"total_stats"}}
 ```
 
-#### Enable Notification
+#### Enable/Disable Notification
 
 PATCH `/notification`
 
 Request:
 
 ```bash
-curl --request PATCH --header "Content-Type: application/json" --data '{"name":"got 5 opens"}' http://localhost:8888/notification
+curl --request PATCH --header "Content-Type: application/json" --data '{"name":"got 5 opens","enabled":true}' http://localhost:8888/notification
 ```
 
 Response:
