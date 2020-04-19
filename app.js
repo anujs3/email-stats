@@ -118,11 +118,11 @@ app.get('/clear', function (req, res) {
     utilities.sendResponse(res, 200, { "success": "counters have been cleared" });
 });
 
-app.get('/notifications', function (req, res) {
+app.get('/notification', function (req, res) {
     utilities.sendResponse(res, 200, alerts);
 });
 
-app.post('/create_notification', function (req, res) {
+app.post('/notification', function (req, res) {
     if (!counters.hasOwnProperty(req.body.counter)) {
         return utilities.sendResponse(res, 400, { "error": "counter does not exist" });
     }
@@ -141,7 +141,7 @@ app.post('/create_notification', function (req, res) {
     return utilities.sendResponse(res, 200, { "success": "created the notification" });
 })
 
-app.patch('/enable_notification', function (req, res) {
+app.patch('/notification', function (req, res) {
     if (alerts.hasOwnProperty(req.body.name)) {
         alerts[req.body.name]["enabled"] = true;
         return utilities.sendResponse(res, 200, { "success": "enabled the notification" });
@@ -149,7 +149,7 @@ app.patch('/enable_notification', function (req, res) {
     return utilities.sendResponse(res, 400, { "error": "notification does not exist" });
 })
 
-app.delete('/delete_notification', function (req, res) {
+app.delete('/notification', function (req, res) {
     if (alerts.hasOwnProperty(req.body.name)) {
         delete alerts[req.body.name];
         return utilities.sendResponse(res, 200, { "success": "deleted the notification" });

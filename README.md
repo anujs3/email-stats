@@ -297,12 +297,12 @@ You can create alerts to get notified via a text message when you reach a certai
 
 #### Create Notification
 
-POST `/create_notification`
+POST `/notification`
 
 Request:
 
 ```bash
-curl --request POST --header "Content-Type: application/json" --data '{"name":"got 5 opens","event":"open","threshold":5,"phone":"+10001112222","counter":"total_stats"}' http://localhost:8888/create_notification
+curl --request POST --header "Content-Type: application/json" --data '{"name":"got 5 opens","event":"open","threshold":5,"phone":"+10001112222","counter":"total_stats"}' http://localhost:8888/notification
 ```
 
 Response:
@@ -313,12 +313,12 @@ Response:
 
 #### Get Notifications
 
-GET `/notifications`
+GET `/notification`
 
 Request:
 
 ```bash
-curl http://localhost:8888/notifications
+curl http://localhost:8888/notification
 ```
 
 Response:
@@ -329,12 +329,12 @@ Response:
 
 #### Enable Notification
 
-PATCH `/enable_notification`
+PATCH `/notification`
 
 Request:
 
 ```bash
-curl --request PATCH --header "Content-Type: application/json" --data '{"name":"got 5 opens"}' http://localhost:8888/enable_notification
+curl --request PATCH --header "Content-Type: application/json" --data '{"name":"got 5 opens"}' http://localhost:8888/notification
 ```
 
 Response:
@@ -345,12 +345,12 @@ Response:
 
 #### Delete Notification
 
-DELETE `/delete_notification`
+DELETE `/notification`
 
 Request:
 
 ```bash
-curl --request DELETE --header "Content-Type: application/json" --data '{"name":"got 5 opens"}' http://localhost:8888/delete_notification
+curl --request DELETE --header "Content-Type: application/json" --data '{"name":"got 5 opens"}' http://localhost:8888/notification
 ```
 
 Response:
